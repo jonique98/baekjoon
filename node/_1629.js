@@ -1,35 +1,47 @@
-const readline = require('readline');
+const readline = require("readline");
 
 const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
+	input: process.stdin,
+	output: process.stdout,
 });
 
 let input = [];
 
-rl.on('line', function (line) {
-  input.push(line);
-}).on('close', function () {
-	let [A, B, C] = input[0].split(' ').map(Number);
+rl.on("line", function(line) {
+	input.push(line)}
+).on("close", function(){
+	let a = input[0].split(' ');
 
-	A = BigInt(A);
-	C = BigInt(C);
+	let A = Number(a[0]);
+	let B = Number(a[1]);
+	let C = Number(a[2]);
 
 	let m = [];
 	let cnt = 0;
 
-	const pow = (ex) => {
-		if(ex === 1)
-			return A % C;
-		
-		let temp = BigInt(pow(Math.floor(ex/2)));
+	let b = B;
 
-		if(ex % 2 === 1)
-			return temp * temp % C * A % C;
+	while(b > 1) {
+
+		if(b % 2 === 1)
+			m.push(1);
 		else
-			return temp * temp % C;
+			m.push(0);
+
+		b = Math.floor(b / 2);
+		cnt++;
 	}
 
-	console.log(pow(B).toString());
+	while (cnt > 0){
+		let temp = (A%C);
+
+		if(m[cnt-1] === 1)
+			A = ((temp * temp) * (A % C)) % C;
+		else
+			A = temp*temp%C;
+		cnt--;
+	}
+
+	console.log(A);
 
 });

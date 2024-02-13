@@ -1,30 +1,37 @@
-const fs = require('fs');
-const input = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
+let readline = require("readline");
 
-let line = input[0].split(' ').map(Number);
+let rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout,
+});
 
-const N = line[0];
-const K = line[1];
+let input = [];
+rl.on("line", (line)=> {
+	input.push(line);
+}).on("close", () => {
+	let N = Number(input[0].split(' ')[0]);
+	let K = Number(input[0].split(' ')[1]);
 
-const list = [];
-for(let i = 1; i <= N; i++)
-	list.push(input[i].split(' ').map(Number));
+	let arr = [];
+	for(let i = 1; i <= N; i++)
+		arr.push(input[i].split(' ').map(Number));
 
-const sum = (list, index) => {
-	let n = 0;
-	for(let i = 0; i < list.length; i++){
-		n += list[i][index];
-	}
-	return n;
-}
+		let dp = Array.from(Array(N + 1), () => Array(K + 1).fill(0));
 
-if(sum(list, 0) <= K)
-	return console.log(sum(list, 1));
-
-const dp = [];
-for(let i = 0; i <= N; i++){
-}
-
-console.log(dp[K][N-1]);
+		for(let i = 1; i <= N; i++){
+			let W = arr[i-1][0];
+			let P = arr[i-1][1];
+			for(let j = 1; j <= K; j++){
+				if(j >= W)
+					dp[i][j] = Math.max(dp[i - 1][j - W] + P, dp[i - 1][j]);
+				else
+					dp[i][j] = dp[i - 1][j];
+			}
+		}
 
 
+		console.log(dp[N][K]);
+
+
+
+})
